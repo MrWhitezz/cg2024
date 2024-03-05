@@ -34,7 +34,7 @@ if __name__ == '__main__':
                     if item_type == 'line':
                         pixels = alg.draw_line(p_list, algorithm)
                         for x, y in pixels:
-                            canvas[height - 1 - y, x] = color
+                            canvas[height - 1 - y, x] = color  # 根据Pillow版本而定，最终输出的视觉结果需要以画布左上角为坐标原点
                     elif item_type == 'polygon':
                         pass
                     elif item_type == 'ellipse':
