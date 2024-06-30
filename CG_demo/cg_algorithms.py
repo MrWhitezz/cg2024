@@ -29,6 +29,8 @@ def draw_line(p_list, algorithm):
         dx = x1 - x0
         dy = y1 - y0
         steps = max(abs(dx), abs(dy))
+        if steps == 0:
+            return result
         x_inc = dx / steps
         y_inc = dy / steps
         x, y = x0, y0
@@ -159,7 +161,7 @@ def draw_b_spline(points, u):
     k = 3  # B样条曲线的度
     curve_points = []
 
-    for t in np.linspace(u[k], u[n+1], num=100):
+    for t in np.linspace(u[k], u[n+1], num=1000):
         x, y = 0.0, 0.0
         for i in range(n+1):
             coeff = b_spline_basis(i, k, t, u)
@@ -178,7 +180,7 @@ def draw_curve(p_list, algorithm):
     """
     curve_points = []
     if algorithm == 'Bezier':
-        for t in [i / 100.0 for i in range(101)]:
+        for t in [i / 1000.0 for i in range(1001)]:
             curve_points.append(bezier_curve(p_list, t))
     elif algorithm == 'B-spline':
         # 假设节点向量为均匀的情况
