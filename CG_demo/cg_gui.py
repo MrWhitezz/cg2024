@@ -115,11 +115,26 @@ class MyItem(QGraphicsItem):
                 painter.setPen(QColor(255, 0, 0))
                 painter.drawRect(self.boundingRect())
         elif self.item_type == 'polygon':
-            pass
+            item_pixels = alg.draw_polygon(self.p_list, self.algorithm)
+            for p in item_pixels:
+                painter.drawPoint(*p)
+            if self.selected:
+                painter.setPen(QColor(0, 0, 255))
+                painter.drawRect(self.boundingRect()) 
         elif self.item_type == 'ellipse':
-            pass
+            item_pixels = alg.draw_ellipse(self.p_list)
+            for p in item_pixels:
+                painter.drawPoint(*p)
+            if self.selected:
+                painter.setPen(QColor(0, 255, 0))
+                painter.drawRect(self.boundingRect())
         elif self.item_type == 'curve':
-            pass
+            item_pixels = alg.draw_curve(self.p_list, self.algorithm)
+            for p in item_pixels:
+                painter.drawPoint(*p)
+            if self.selected:
+                painter.setPen(QColor(255, 0, 255))
+                painter.drawRect(self.boundingRect())
 
     def boundingRect(self) -> QRectF:
         if self.item_type == 'line':

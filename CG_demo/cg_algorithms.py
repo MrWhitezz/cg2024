@@ -319,5 +319,52 @@ def clip(p_list, x_min, y_min, x_max, y_max, algorithm):
         return cohen_sutherland_clip(p_list, x_min, y_min, x_max, y_max)
     elif algorithm == 'Liang-Barsky':
         # TODO: Implement Liang-Barsky Algorithm
-        return cohen_sutherland_clip(p_list, x_min, y_min, x_max, y_max)
+        return Liang_Barsky_clip(p_list, x_min, y_min, x_max, y_max)
     return [[x0, y0], [x1, y1]]
+
+
+def Liang_Barsky_clip(p_list, x_min, y_min, x_max, y_max):
+    """Liang-Barsky 线段裁剪
+
+    :param p_list: (list of list of int: [[x0, y0], [x1, y1]]) 线段的起点和终点坐标
+    :param x_min: 裁剪窗口左上角x坐标
+    :param y_min: 裁剪窗口左上角y坐标
+    :param x_max: 裁剪窗口右下角x坐标
+    :param y_max: 裁剪窗口右下角y坐标
+    :return: (list of list of int: [[x_0, y_0], [x_1, y_1]]) 裁剪后线段的起点和终点坐标
+    """
+    x0, y0 = p_list[0]
+    x1, y1 = p_list[1]
+
+    dx = x1 - x0
+    dy = y1 - y0
+
+    p = [-dx, dx, -dy, dy]
+    q = [x0 - x_min, x_max - x0, y0 - y_min, y_max - y0]
+
+    u1 = 0.0
+    u2 = 1.0
+
+    for i in range(4):
+        if p[i] == 0:
+            if q[i] < 0:
+                return []  # Line is parallel to and outside the clipping window
+        else:
+            t = q[i] / p[i]
+            if p[i] < 0:
+                if t > u2:
+                    return []  # Line is outside the clipping window
+                elif t > u1:
+                    u1 = t
+            else:
+                if t < u1:
+                    return []  # Line is outside the clipping window
+                elif t < u2:
+                    u2 = t
+
+    clipped_x0 = int(x0 + u1 * dx)
+    clipped_y0 = int(y0 + u1 * dy)
+    clipped_x1 = int(x0 + u2 * dx)
+    clipped_y1 = int(y0 + u2 * dy)
+
+    return [[clipped_x0, clipped_y0], [clipped_x1, clipped_y1]]
